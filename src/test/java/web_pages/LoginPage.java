@@ -95,16 +95,16 @@ public class LoginPage {
     }
 
     @Step("Click Register button")
-    public Account register(){
+    public AccountPage register(){
         register.click();
-        return new Account(driver);
+        return new AccountPage(driver);
     }
 
     @Step("Log in account")
-    public Account signIn(){
+    public AccountPage signIn(){
         email.sendKeys(properties.getProperty("USER_NAME_STORE"));
         password.sendKeys(properties.getProperty("PASSWORD_STORE"));
         signIn.click();
-        return new Account(driver);
+        return new AccountPage(driver);
     }
 }
