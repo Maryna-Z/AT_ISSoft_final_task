@@ -46,7 +46,7 @@ public class WishlistTests extends BaseTest{
         LoginPage loginPage = header.loginToSite();
         AccountPage account = loginPage.signIn();
         CatalogPage catalog = header.goToProductList();
-        String productName = catalog.addProductToWishList(numberOfProductInTheList).trim();
+        String productName = catalog.addProductToWishList(numberOfProductInTheList);
         account = header.goToAccount();
         wishlist = account.goIntoWishlist();
         wishlist.selectWishlist();

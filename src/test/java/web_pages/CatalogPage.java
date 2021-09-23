@@ -43,7 +43,7 @@ public class CatalogPage {
         new Actions(driver).moveToElement(quickView).click().perform();
         WebDriverWait wait = new WebDriverWait(driver, 20);
         driver.switchTo().frame(0);
-        String productName = retrieveProductName();
+        String productName = retrieveProductName().trim();
         wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(wishListButtonStr))).click();
         wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(closeStr))).click();
         driver.switchTo().defaultContent();

@@ -52,11 +52,10 @@ public class WishlistPage extends BaseTest {
     @Step("Retrieve name of product from wishlist")
     public String nameOfProductInWishlist(){
         WebDriverWait wait = new WebDriverWait(driver, 20);
-        wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(productDescriptionStr))).getText();
-        String detail = productDetail.getText();
-        int detailLength = detail.length();
-        int descriptionLength = productDescriptionStr.length();
-        return productDescriptionStr.substring(0, descriptionLength - detailLength).trim();
+        String textOfProductDescription = wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(productDescriptionStr)))
+                .getText();
+        String[] productName = textOfProductDescription.split("\n");
+        return productName[0].trim();
     }
 
     @Step("Retrieve product quantity")
