@@ -25,6 +25,11 @@ public class Header {
     @FindBy(xpath = "//header[@id = 'header']//div[@class='nav']//a[@class='login']")
     private WebElement signInButton;
 
+    @FindBy(css = "[title='View my shopping cart']")
+    private WebElement viewShoppingCart;
+
+
+
     public Header(WebDriver driver) {
         this.driver = driver;
         PageFactory.initElements(this.driver, this);
@@ -53,6 +58,11 @@ public class Header {
         WebDriverWait wait = new WebDriverWait(driver, 20);
         wait.until(ExpectedConditions.elementToBeClickable(userAccount)).click();
         return new AccountPage(driver);
+    }
+
+    @Step("Go to quick cart and delete product")
+    public void deleteProductFromQuickCart(){
+
     }
 
 }

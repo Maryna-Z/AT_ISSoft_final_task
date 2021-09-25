@@ -10,26 +10,34 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class CatalogPage {
     WebDriver driver;
 
-    @FindBy(xpath = "//div[@id='center_column']//ul[@class = 'product_list grid row']//li[1]")
-    private WebElement product;
-
-    private String productStr = "//div[@id='center_column']//ul[@class = 'product_list grid row']//li[%s]";
+    @FindBy(css = "[class='product-image-container']")
+    private List<WebElement> productContainers;
 
     @FindBy(css = ".quick-view")
-    private WebElement quickView;
+    private List<WebElement> quickViews;
 
     String wishListButtonStr = "#buy_block #wishlist_button";
-
-    private String closeStr = "[title = Close]";
 
     @FindBy(css = "[title = Close]")
     private WebElement close;
 
-    @FindBy(css = "#product h1[itemprop=\"name\"]")
+    @FindBy(css = "#product h1[itemprop='name']")
     private WebElement productName;
+
+    @FindBy(css = "p#add_to_cart button")
+    private WebElement addToCartButton;
+
+    @FindBy(css = "div#layer_cart span[title='Close window']")
+    private WebElement closeWindow;
+
+    @FindBy(css = ".shopping_cart a")
+    private WebElement viewShoppingCart;
 
     public CatalogPage(WebDriver driver) {
         this.driver = driver;
@@ -37,22 +45,57 @@ public class CatalogPage {
     }
 
     @Step("Add product in wishlist")
-    public String addProductToWishList(int numberOfProductInList){
-        new Actions(driver).moveToElement(driver.findElement(By.xpath(String.format(productStr,numberOfProductInList))))
-                .perform();
-        new Actions(driver).moveToElement(quickView).click().perform();
-        WebDriverWait wait = new WebDriverWait(driver, 20);
-        driver.switchTo().frame(0);
-        String productName = retrieveProductName().trim();
-        wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(wishListButtonStr))).click();
-        wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(closeStr))).click();
-        driver.switchTo().defaultContent();
-        wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(closeStr))).click();
-        return productName;
+    public List<String> addProductsToWishList(int numberInList){
+        int size = productContainers.size();
+
+        if(size >= numberInList){
+            List<String> productNames = new ArrayList<>();
+            for (int i = 0; i < numberInList; i++){
+                productNames.add(selectProducts(i));
+                WebDriverWait wait = new WebDriverWait(driver, 20);
+                wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(wishListButtonStr))).click();
+                wait.until(ExpectedConditions.elementToBeClickable(close)).click();
+                driver.switchTo().defaultContent();
+                wait.until(ExpectedConditions.elementToBeClickable(close)).click();
+            }
+            return productNames;
+        }
+        return null;
     }
 
     @Step("Retrieve product name")
     public String  retrieveProductName(){
         return productName.getText();
+    }
+
+    @Step("Add products to cart")
+    public List<String> addProductsToCart(int numberInList){
+        int size = productContainers.size();
+
+        if(size >= numberInList){
+            List<String> productNames = new ArrayList<>();
+            for (int i = 0; i < numberInList; i++){
+                productNames.add(selectProducts(i));
+                WebDriverWait wait = new WebDriverWait(driver, 20);
+                wait.until(ExpectedConditions.elementToBeClickable(addToCartButton)).click();
+                driver.switchTo().defaultContent();
+                wait.until(ExpectedConditions.elementToBeClickable(closeWindow)).click();
+            }
+            return productNames;
+        }
+    return null;
+    }
+
+    @Step("Select products")
+    public String selectProducts(int numberInList){
+        new Actions(driver).moveToElement(productContainers.get(numberInList)).perform();
+        new Actions(driver).moveToElement(quickViews.get(numberInList)).click().perform();
+        driver.switchTo().frame(0);
+        return retrieveProductName().trim();
+    }
+
+    @Step("Go to shopping cart")
+    public void goToShoppingCart(){
+        viewShoppingCart.click();
     }
 }

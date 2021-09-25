@@ -1,0 +1,15 @@
+web_pages\CatalogPage.class
+web_pages\LoginPage.class
+tests\CreateAccountTests.class
+utils\Utils.class
+web_pages\Header.class
+tests\WishlistTests.class
+tests\BaseTest.class
+test_extensions\ScreenshotRules.class
+web_pages\WishlistPage.class
+web_pages\AccountPage.class
+driver\DriverSingleton$1.class
+driver\Config.class
+tests\LoginTests.class
+web_pages\ProductPage.class
+driver\DriverSingleton.class

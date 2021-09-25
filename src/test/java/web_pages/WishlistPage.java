@@ -30,6 +30,12 @@ public class WishlistPage extends BaseTest {
     @FindBy(css = "#block-history table td[class=wishlist_delete] a")
     private WebElement deleteWishlist;
 
+    @FindBy(css = "#name")
+    private WebElement name;
+
+    @FindBy(id = "submitWishlist")
+    private WebElement submit;
+
     public WishlistPage(WebDriver driver) {
         this.driver = driver;
         PageFactory.initElements(this.driver, this);
@@ -51,11 +57,12 @@ public class WishlistPage extends BaseTest {
 
     @Step("Retrieve name of product from wishlist")
     public String nameOfProductInWishlist(){
-        WebDriverWait wait = new WebDriverWait(driver, 20);
+        WebDriverWait wait = new WebDriverWait(driver, 10);
         String textOfProductDescription = wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(productDescriptionStr)))
                 .getText();
-        String[] productName = textOfProductDescription.split("\n");
-        return productName[0].trim();
+        String[] descriptions = textOfProductDescription.split("\n");
+        String productName = descriptions[0].trim();
+        return productName;
     }
 
     @Step("Retrieve product quantity")
@@ -68,6 +75,12 @@ public class WishlistPage extends BaseTest {
         deleteWishlist.click();
         Alert alert = driver.switchTo().alert();
         alert.accept();
+    }
+
+    @Step("Create wishlist")
+    public void createWishlist(String nameOfWishlist){
+        name.sendKeys(nameOfWishlist);
+        submit.click();
     }
 
 }
