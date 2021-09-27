@@ -59,10 +59,4 @@ public class Header {
         wait.until(ExpectedConditions.elementToBeClickable(userAccount)).click();
         return new AccountPage(driver);
     }
-
-    @Step("Go to quick cart and delete product")
-    public void deleteProductFromQuickCart(){
-
-    }
-
 }

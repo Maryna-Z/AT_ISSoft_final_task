@@ -57,18 +57,18 @@ public class ShoppingCart {
     }
 
     @Step("Retrieve product price")
-    public List<Integer> getProductPrice(){
-        List<Integer> productsPrice = new ArrayList<>();
+    public List<Double> getProductPrice(){
+        List<Double> productsPrice = new ArrayList<>();
         for(WebElement productPrice : price){
             String productPriceText = productPrice.getText();
-            productsPrice.add(Integer.valueOf(productPriceText.substring(1).trim()));
+            productsPrice.add(Double.valueOf(productPriceText.substring(1).trim()));
         }
         return productsPrice;
     }
 
     @Step("Retrieve total product quantity")
-    public Integer getTotalProductPrice(){
-        return Integer.valueOf(totalProductPrice.getText().substring(1).trim());
+    public Double getTotalProductPrice(){
+        return Double.valueOf(totalProductPrice.getText().substring(1).trim());
     }
 
     @Step("Delete products from cart")
@@ -79,12 +79,14 @@ public class ShoppingCart {
         if (size > 0){
             for(WebElement delete : deleteElements){
                 delete.click();
-                if (size > 1){
-                    wait.until(ExpectedConditions.textToBePresentInElement(summaryProductsQuantity,size - 1 + " Products"));
-                } else {
-                    wait.until(ExpectedConditions.textToBePresentInElement(summaryProductsQuantity, size - 1 + " Product"));
-                }
                 size--;
+                if (size == 1){
+                    wait.until(ExpectedConditions.textToBePresentInElement(summaryProductsQuantity, size + " Product"));
+                }
+                if (size > 1) {
+                    wait.until(ExpectedConditions.textToBePresentInElement(summaryProductsQuantity,size + " Products"));
+                }
+
             }
         }
     }
