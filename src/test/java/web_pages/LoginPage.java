@@ -12,6 +12,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import utils.Utils;
 
 import java.util.Properties;
+import java.util.concurrent.TimeUnit;
 
 public class LoginPage {
     WebDriver driver;
@@ -52,6 +53,8 @@ public class LoginPage {
 
     @FindBy(id = "email")
     private WebElement email;
+
+    private String emailStr;
 
     @FindBy(id = "SubmitLogin")
     private WebElement signIn;
@@ -102,6 +105,7 @@ public class LoginPage {
 
     @Step("Log in account")
     public AccountPage signIn(){
+        driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
         email.sendKeys(properties.getProperty("USER_NAME_STORE"));
         password.sendKeys(properties.getProperty("PASSWORD_STORE"));
         signIn.click();

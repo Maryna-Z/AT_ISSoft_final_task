@@ -38,7 +38,8 @@ public class Header {
     @Step("Click sign in button")
     public LoginPage loginToSite(){
         driver.get(url);
-        signInButton.click();
+        WebDriverWait wait = new WebDriverWait(driver, 20);
+        wait.until(ExpectedConditions.elementToBeClickable(signInButton)).click();
         return new LoginPage(driver);
     }
 

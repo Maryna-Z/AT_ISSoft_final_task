@@ -15,11 +15,12 @@ import static org.testng.Assert.assertTrue;
 
 @Epic("Shop functionality")
 @Feature("Add into Wishlist")
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Tag("Critical")
-@Execution(CONCURRENT)
 public class WishlistTests extends BaseTest{
     private Header header;
     private WishlistPage wishlist;
+    private AccountPage account;
 
     private void signIn(){
         header = new Header(driver);
@@ -31,13 +32,13 @@ public class WishlistTests extends BaseTest{
     @Story("Content of wishlist tests")
     @Severity(SeverityLevel.CRITICAL)
     @Description("Verify that wishlist is empty")
-    @Tag("stable")
+    @Tag("SkipCleanup")
     public void verifyWishlist(){
         header = new Header(driver);
         LoginPage loginPage = header.loginToSite();
         AccountPage account = loginPage.signIn();
         WishlistPage wishlist = account.goIntoWishlist();
-        Assertions.assertTrue(wishlist.isElementVisible(), "wishlist is empty");
+        Assertions.assertTrue(!wishlist.isElementVisible(), "wishlist is empty");
     }
 
     @ParameterizedTest
@@ -47,9 +48,7 @@ public class WishlistTests extends BaseTest{
     @Description("Verify that product can be add to auto-created Wishlist")
     @Tag("stable")
     public void addToAutoCreatedWishlistProduct(int numberOfProductInTheList){
-        header = new Header(driver);
-        LoginPage loginPage = header.loginToSite();
-        AccountPage account = loginPage.signIn();
+        verifyWishlist();
         CatalogPage catalog = header.goToProductList();
         List<String> productsName = catalog.addProductsToWishList(numberOfProductInTheList);
         account = header.goToAccount();
@@ -60,7 +59,7 @@ public class WishlistTests extends BaseTest{
         Assertions.assertAll("Wishlist was created automatically and my product is in the list",
                 () -> assertTrue(wishlist.isElementVisible()),
                 () -> assertEquals( nameOfProductInWishlist, productsName.get(0), "My product in wishlist"),
-                () -> assertEquals( quantity, 1, "Quantity of product is 1")
+                () -> assertEquals( quantity, numberOfProductInTheList, "Quantity of product is 1")
         );
     }
 
@@ -71,15 +70,11 @@ public class WishlistTests extends BaseTest{
     @Description("Verify that product can be add to auto-created Wishlist")
     @Tag("stable")
     public void addToManuallyCreatedWishlistProduct(int numberOfProductInTheList){
-        header = new Header(driver);
-        LoginPage loginPage = header.loginToSite();
-        AccountPage account = loginPage.signIn();
-        wishlist = account.goIntoWishlist();
+        verifyWishlist();
         wishlist.createWishlist("My first list");
         CatalogPage catalog = header.goToProductList();
         List<String> productsName = catalog.addProductsToWishList(numberOfProductInTheList);
         account = header.goToAccount();
-        wishlist = account.goIntoWishlist();
         wishlist.selectWishlist();
         String nameOfProductInWishlist = wishlist.nameOfProductInWishlist();
         int quantity = wishlist.retrieveProductQuantity();
@@ -92,7 +87,10 @@ public class WishlistTests extends BaseTest{
 
 
     @AfterEach
-    public void deleteWishlist(){
+    public void deleteWishlist(TestInfo testInfo){
+        if(testInfo.getTags().contains("SkipCleanup")) {
+            return;
+        }
         wishlist.deleteProductFromWishlist();
     }
 }

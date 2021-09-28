@@ -19,22 +19,22 @@ public class ScreenshotRules implements TestWatcher {
     public void testFailed(ExtensionContext context, Throwable cause) {
         takeScreenshot();
         addTestResultParameters();
-        DriverSingleton.getInstance().closeWebDriver();
+        //DriverSingleton.getInstance().closeWebDriver();
     }
 
     @Override
     public void testDisabled(ExtensionContext context, Optional<String> reason) {
-        DriverSingleton.getInstance().closeWebDriver();
+        //DriverSingleton.getInstance().closeWebDriver();
     }
 
     @Override
     public void testSuccessful(ExtensionContext context) {
-        DriverSingleton.getInstance().closeWebDriver();
+        //DriverSingleton.getInstance().closeWebDriver();
     }
 
     @Override
     public void testAborted(ExtensionContext context, Throwable cause) {
-        DriverSingleton.getInstance().closeWebDriver();
+        //DriverSingleton.getInstance().closeWebDriver();
     }
     @Attachment(value = "Page screenshot", type = "image/png")
     public byte[] saveScreenshot(byte[] screenShot) {
