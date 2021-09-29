@@ -70,11 +70,16 @@ public class WishlistTests extends BaseTest{
     @Description("Verify that product can be add to auto-created Wishlist")
     @Tag("stable")
     public void addToManuallyCreatedWishlistProduct(int numberOfProductInTheList){
-        verifyWishlist();
+        //verifyWishlist();
+        header = new Header(driver);
+        LoginPage loginPage = header.loginToSite();
+        account = loginPage.signIn();
+        wishlist = account.goIntoWishlist();
         wishlist.createWishlist("My first list");
         CatalogPage catalog = header.goToProductList();
         List<String> productsName = catalog.addProductsToWishList(numberOfProductInTheList);
         account = header.goToAccount();
+        wishlist = account.goIntoWishlist();
         wishlist.selectWishlist();
         String nameOfProductInWishlist = wishlist.nameOfProductInWishlist();
         int quantity = wishlist.retrieveProductQuantity();
