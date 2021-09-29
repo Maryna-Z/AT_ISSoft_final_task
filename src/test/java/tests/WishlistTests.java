@@ -70,7 +70,6 @@ public class WishlistTests extends BaseTest{
     @Description("Verify that product can be add to auto-created Wishlist")
     @Tag("stable")
     public void addToManuallyCreatedWishlistProduct(int numberOfProductInTheList){
-        //verifyWishlist();
         header = new Header(driver);
         LoginPage loginPage = header.loginToSite();
         account = loginPage.signIn();
@@ -86,7 +85,7 @@ public class WishlistTests extends BaseTest{
         Assertions.assertAll("Wishlist was created automatically and my product is in the list",
                 () -> assertTrue(wishlist.isElementVisible()),
                 () -> assertEquals( nameOfProductInWishlist, productsName.get(0), "My product in wishlist"),
-                () -> assertEquals( quantity, 1, "Quantity of product is 1")
+                () -> assertEquals( quantity, numberOfProductInTheList, "Quantity of product is 1")
         );
     }
 
