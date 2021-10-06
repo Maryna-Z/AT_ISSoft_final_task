@@ -1,19 +1,16 @@
 package web_pages;
 
 import io.qameta.allure.Step;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ShoppingCart {
-    WebDriver driver;
+public class ShoppingCart extends BasePage{
 
     @FindBy(css = "tbody .product-name a")
     private List<WebElement> descriptions;
@@ -33,8 +30,7 @@ public class ShoppingCart {
     @FindBy(css = "#summary_products_quantity")
     private WebElement summaryProductsQuantity;
 
-    public ShoppingCart(WebDriver driver) {
-        this.driver = driver;
+    public ShoppingCart() {
         PageFactory.initElements(this.driver, this);
     }
 

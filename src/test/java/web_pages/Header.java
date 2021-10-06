@@ -1,15 +1,12 @@
 package web_pages;
 
 import io.qameta.allure.Step;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
-public class Header {
-    WebDriver driver;
+public class Header extends BasePage {
+    private String url = "http://automationpractice.com/";
 
     @FindBy(css = "[title = 'View my customer account'] span")
     private WebElement viewCustomerAccountName;
@@ -20,33 +17,25 @@ public class Header {
     @FindBy(css = "#block_top_menu a[title=\"Women\"]")
     private WebElement menuWomen;
 
-    private String url = "http://automationpractice.com/";
-
     @FindBy(xpath = "//header[@id = 'header']//div[@class='nav']//a[@class='login']")
     private WebElement signInButton;
 
     @FindBy(css = "[title='View my shopping cart']")
     private WebElement viewShoppingCart;
 
-
-
-    public Header(WebDriver driver) {
-        this.driver = driver;
+    public Header() {
         PageFactory.initElements(this.driver, this);
     }
 
     @Step("Click sign in button")
-    public LoginPage loginToSite(){
+    public void loginToSite(){
         driver.get(url);
-        WebDriverWait wait = new WebDriverWait(driver, 20);
-        wait.until(ExpectedConditions.elementToBeClickable(signInButton)).click();
-        return new LoginPage(driver);
+        waitForClickable(signInButton).click();
     }
 
     @Step("go to product list")
-    public CatalogPage goToProductList(){
+    public void goToProductList(){
         menuWomen.click();
-        return new CatalogPage(driver);
     }
 
     @Step("Retrieve user name from header")
@@ -55,9 +44,9 @@ public class Header {
     }
 
     @Step("Go to account")
-    public AccountPage goToAccount(){
-        WebDriverWait wait = new WebDriverWait(driver, 20);
-        wait.until(ExpectedConditions.elementToBeClickable(userAccount)).click();
-        return new AccountPage(driver);
+    public void goToAccount(){
+        /*WebDriverWait wait = new WebDriverWait(driver, 20);
+        wait.until(ExpectedConditions.elementToBeClickable(userAccount)).click();*/
+        waitForClickable(userAccount).click();
     }
 }

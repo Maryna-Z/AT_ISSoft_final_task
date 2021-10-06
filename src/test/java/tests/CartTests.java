@@ -4,7 +4,6 @@ import io.qameta.allure.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Tag;
-import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import web_pages.CatalogPage;
@@ -14,14 +13,12 @@ import web_pages.ShoppingCart;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.parallel.ExecutionMode.CONCURRENT;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 
 @Epic("Shop functionality")
 @Feature("Add into Cart")
 @Tag("Critical")
-@Execution(CONCURRENT)
 public class CartTests extends BaseTest{
     private Header header;
     private ShoppingCart cart;
@@ -33,13 +30,15 @@ public class CartTests extends BaseTest{
     @Description("Verify that products can be add to cart")
     @Tag("stable")
     public void addToCart(int numberOfProductInTheList){
-        header = new Header(driver);
-        LoginPage loginPage = header.loginToSite();
+        header = new Header();
+        header.loginToSite();
+        LoginPage loginPage = new LoginPage();
         loginPage.signIn();
-        CatalogPage catalog = header.goToProductList();
+        header.goToProductList();
+        CatalogPage catalog = new CatalogPage();
         List<String> nameOfProductInCart = catalog.addProductsToCart(numberOfProductInTheList);
         catalog.goToShoppingCart();
-        cart = new ShoppingCart(driver);
+        cart = new ShoppingCart();
         List<String> productsNames = cart.getProductsNames();
         List<Integer> productsQuantity = cart.getProductsQuantity();
         List<Double> productPrice = cart.getProductPrice();

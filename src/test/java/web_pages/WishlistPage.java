@@ -8,8 +8,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import tests.BaseTest;
 
-public class WishlistPage extends BaseTest {
-    WebDriver driver;
+public class WishlistPage extends BasePage {
 
     @FindBy(css = "#block-history table")
     private WebElement wishlistTable;
@@ -36,8 +35,7 @@ public class WishlistPage extends BaseTest {
     @FindBy(id = "submitWishlist")
     private WebElement submit;
 
-    public WishlistPage(WebDriver driver) {
-        this.driver = driver;
+    public WishlistPage() {
         PageFactory.initElements(this.driver, this);
     }
 

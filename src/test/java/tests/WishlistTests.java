@@ -1,10 +1,12 @@
 package tests;
 
+import driver.DriverSingleton;
 import io.qameta.allure.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.openqa.selenium.WebDriver;
 import web_pages.*;
 
 import java.util.List;
@@ -21,12 +23,7 @@ public class WishlistTests extends BaseTest{
     private Header header;
     private WishlistPage wishlist;
     private AccountPage account;
-
-    private void signIn(){
-        header = new Header(driver);
-        LoginPage loginPage = header.loginToSite();
-        AccountPage account = loginPage.signIn();
-    }
+    private WebDriver driver = DriverSingleton.getInstance().getCurrentWebDriver();
 
     @Test
     @Story("Content of wishlist tests")
@@ -34,10 +31,13 @@ public class WishlistTests extends BaseTest{
     @Description("Verify that wishlist is empty")
     @Tag("SkipCleanup")
     public void verifyWishlist(){
-        header = new Header(driver);
-        LoginPage loginPage = header.loginToSite();
-        AccountPage account = loginPage.signIn();
-        WishlistPage wishlist = account.goIntoWishlist();
+        header = new Header();
+        LoginPage loginPage = new LoginPage();
+        header.loginToSite();
+        AccountPage account = new AccountPage();
+        loginPage.signIn();
+        WishlistPage wishlist = new WishlistPage();
+        account.goIntoWishlist();
         Assertions.assertTrue(!wishlist.isElementVisible(), "wishlist is empty");
     }
 
@@ -49,10 +49,13 @@ public class WishlistTests extends BaseTest{
     @Tag("stable")
     public void addToAutoCreatedWishlistProduct(int numberOfProductInTheList){
         verifyWishlist();
-        CatalogPage catalog = header.goToProductList();
+        CatalogPage catalog = new CatalogPage();
+        header.goToProductList();
         List<String> productsName = catalog.addProductsToWishList(numberOfProductInTheList);
-        account = header.goToAccount();
-        wishlist = account.goIntoWishlist();
+        account = new AccountPage();
+        header.goToAccount();
+        wishlist = new WishlistPage();
+        account.goIntoWishlist();
         wishlist.selectWishlist();
         String nameOfProductInWishlist = wishlist.nameOfProductInWishlist();
         int quantity = wishlist.retrieveProductQuantity();
@@ -70,15 +73,19 @@ public class WishlistTests extends BaseTest{
     @Description("Verify that product can be add to auto-created Wishlist")
     @Tag("stable")
     public void addToManuallyCreatedWishlistProduct(int numberOfProductInTheList){
-        header = new Header(driver);
-        LoginPage loginPage = header.loginToSite();
-        account = loginPage.signIn();
-        wishlist = account.goIntoWishlist();
+        header = new Header();
+        LoginPage loginPage = new LoginPage();
+        header.loginToSite();
+        account = new AccountPage();
+        loginPage.signIn();
+        wishlist = new WishlistPage();
+        account.goIntoWishlist();
         wishlist.createWishlist("My first list");
-        CatalogPage catalog = header.goToProductList();
+        CatalogPage catalog = new CatalogPage();
+        header.goToProductList();
         List<String> productsName = catalog.addProductsToWishList(numberOfProductInTheList);
-        account = header.goToAccount();
-        wishlist = account.goIntoWishlist();
+        header.goToAccount();
+        account.goIntoWishlist();
         wishlist.selectWishlist();
         String nameOfProductInWishlist = wishlist.nameOfProductInWishlist();
         int quantity = wishlist.retrieveProductQuantity();

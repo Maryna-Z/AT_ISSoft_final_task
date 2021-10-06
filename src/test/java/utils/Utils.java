@@ -1,5 +1,6 @@
 package utils;
 
+import com.google.common.collect.ImmutableMap;
 import exceptions.NoSuchFileException;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.openqa.selenium.By;
@@ -14,6 +15,8 @@ import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Properties;
+
+import static com.github.automatedowl.tools.AllureEnvironmentWriter.allureEnvironmentWriter;
 
 public class Utils {
 
@@ -65,5 +68,15 @@ public class Utils {
     public static String getOsName(WebDriver driver){
         Capabilities cap = ((RemoteWebDriver)driver).getCapabilities();
         return cap.getPlatform().toString();
+    }
+
+    public static void setUpAllureEnvironment(WebDriver driver){
+        allureEnvironmentWriter(
+                ImmutableMap.<String, String>builder()
+                        .put("Browser", getBrowserName(driver))
+                        .put("Browser.Version", getBrowserVersion(driver))
+                        .put("OSName", getOsName(driver))
+                        .build(), System.getProperty("user.dir") + "/target/allure-results/"
+        );
     }
 }
