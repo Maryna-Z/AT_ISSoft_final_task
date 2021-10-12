@@ -10,8 +10,6 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Properties;
 
 import static com.github.automatedowl.tools.AllureEnvironmentWriter.allureEnvironmentWriter;
@@ -29,24 +27,12 @@ public class Utils {
         return properties;
     }
 
-    public static String fileNameGenerator() {
-        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy-HH:mm");
-        String path = "src/test/resources/";
-        return path + "screenshot" + formatter.format(new Date()).replaceAll(":", "-")
-                + " " + RandomStringUtils.randomAlphanumeric(10) + ".png";
-    }
-
     public static String emailGenerator(){
         return "ee1vp" + RandomStringUtils.randomAlphanumeric(10) + "@yandex.by";
     }
 
     public static String stringGenerator(){
         return RandomStringUtils.randomAlphabetic(5);
-    }
-
-    public static String addressGenerator(){
-        return stringGenerator() + ", "
-                + RandomStringUtils.randomNumeric(1, 3) + "-" + RandomStringUtils.randomNumeric(1, 3);
     }
 
     public static String numberGenerator(int count){
