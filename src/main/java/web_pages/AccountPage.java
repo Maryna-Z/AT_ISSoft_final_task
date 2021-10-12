@@ -7,7 +7,7 @@ import org.openqa.selenium.support.PageFactory;
 
 public class AccountPage extends BasePage{
 
-    @FindBy(css = "[title = 'My wishlists']")
+    @FindBy(css = ".lnk_wishlist")
     private WebElement wishList;
 
     public AccountPage() {

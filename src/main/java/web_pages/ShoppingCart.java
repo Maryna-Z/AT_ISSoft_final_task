@@ -24,7 +24,7 @@ public class ShoppingCart extends BasePage{
     @FindBy(css = "#total_product")
     private WebElement totalProductPrice;
 
-    @FindBy(css = "tbody a[title=Delete]")
+    @FindBy(css = "tbody td[data-title=Delete] a")
     private List<WebElement> deleteElements;
 
     @FindBy(css = "#summary_products_quantity")

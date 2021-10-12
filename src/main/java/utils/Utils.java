@@ -1,14 +1,12 @@
 package utils;
 
 import com.google.common.collect.ImmutableMap;
-import exceptions.NoSuchFileException;
+import exceptions.CommonException;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.openqa.selenium.By;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
-import javax.xml.xpath.XPath;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -26,7 +24,7 @@ public class Utils {
         try (InputStream input = new FileInputStream(path)) {
             properties.load(input);
         } catch (IOException ex) {
-            throw new NoSuchFileException("File not found", ex);
+            throw new CommonException("File not found", ex);
         }
         return properties;
     }

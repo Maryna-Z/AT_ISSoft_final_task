@@ -26,7 +26,7 @@ public class CreateAccountTests extends BaseTest{
         Header header = new Header();
         LoginPage loginPage = new LoginPage();
         header.loginToSite();
-        loginPage.createAccount();
+        loginPage.clickCreateAccButton();
         loginPage.fillRequiredFields();
         AccountPage account = new AccountPage();
         loginPage.register();

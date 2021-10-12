@@ -9,11 +9,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.openqa.selenium.WebDriver;
 import test_extensions.Watcher;
 import utils.Utils;
+import web_pages.Header;
+import web_pages.LoginPage;
 
 @ExtendWith(Watcher.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class BaseTest {
-    //WebDriver driver;
 
     @BeforeAll
     public void init(){
@@ -24,5 +25,13 @@ public class BaseTest {
     @AfterAll
     public void closeWebDriver(){
         DriverSingleton.getInstance().closeWebDriver();
+    }
+
+    protected Header loginToSite(){
+        Header header = new Header();
+        LoginPage loginPage = new LoginPage();
+        header.loginToSite();
+        loginPage.signIn();
+        return header;
     }
 }

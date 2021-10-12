@@ -8,20 +8,17 @@ import org.openqa.selenium.support.PageFactory;
 public class Header extends BasePage {
     private String url = "http://automationpractice.com/";
 
-    @FindBy(css = "[title = 'View my customer account'] span")
+    @FindBy(css = ".account span")
     private WebElement viewCustomerAccountName;
 
-    @FindBy(css = "a[title = 'View my customer account']")
+    @FindBy(css = ".account")
     private WebElement userAccount;
 
-    @FindBy(css = "#block_top_menu a[title=\"Women\"]")
+    @FindBy(css = "#block_top_menu a[title='Women']")
     private WebElement menuWomen;
 
     @FindBy(xpath = "//header[@id = 'header']//div[@class='nav']//a[@class='login']")
     private WebElement signInButton;
-
-    @FindBy(css = "[title='View my shopping cart']")
-    private WebElement viewShoppingCart;
 
     public Header() {
         PageFactory.initElements(this.driver, this);
@@ -45,8 +42,6 @@ public class Header extends BasePage {
 
     @Step("Go to account")
     public void goToAccount(){
-        /*WebDriverWait wait = new WebDriverWait(driver, 20);
-        wait.until(ExpectedConditions.elementToBeClickable(userAccount)).click();*/
         waitForClickable(userAccount).click();
     }
 }

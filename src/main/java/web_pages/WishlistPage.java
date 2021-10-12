@@ -1,12 +1,16 @@
 package web_pages;
 
 import io.qameta.allure.Step;
-import org.openqa.selenium.*;
+import org.openqa.selenium.Alert;
+import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import tests.BaseTest;
+
+import java.util.concurrent.TimeUnit;
 
 public class WishlistPage extends BasePage {
 
@@ -19,9 +23,6 @@ public class WishlistPage extends BasePage {
     private WebElement wishlist;
 
     String productDescriptionStr = "#s_title";
-
-    @FindBy(css = "#s_title a[title='Product detail']")
-    private WebElement productDetail;
 
     @FindBy(css = "p input[id=quantity_1_1]")
     private WebElement quantity;
@@ -40,7 +41,7 @@ public class WishlistPage extends BasePage {
     }
 
     @Step("Verify that wishlist table is presented")
-    public boolean isElementVisible(){
+    public boolean isElementIsPresent(){
         try {
             return driver.findElement(By.cssSelector(wishlistTableStr)).isDisplayed();
         } catch (NoSuchElementException ex){
@@ -70,6 +71,7 @@ public class WishlistPage extends BasePage {
 
     @Step("Delete product from wishlist")
     public void deleteProductFromWishlist(){
+        driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
         deleteWishlist.click();
         Alert alert = driver.switchTo().alert();
         alert.accept();

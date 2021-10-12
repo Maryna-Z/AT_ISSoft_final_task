@@ -8,7 +8,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import web_pages.CatalogPage;
 import web_pages.Header;
-import web_pages.LoginPage;
 import web_pages.ShoppingCart;
 
 import java.util.List;
@@ -20,7 +19,6 @@ import static org.testng.Assert.assertTrue;
 @Feature("Add into Cart")
 @Tag("Critical")
 public class CartTests extends BaseTest{
-    private Header header;
     private ShoppingCart cart;
 
     @ParameterizedTest
@@ -30,10 +28,7 @@ public class CartTests extends BaseTest{
     @Description("Verify that products can be add to cart")
     @Tag("stable")
     public void addToCart(int numberOfProductInTheList){
-        header = new Header();
-        header.loginToSite();
-        LoginPage loginPage = new LoginPage();
-        loginPage.signIn();
+        Header header = loginToSite();
         header.goToProductList();
         CatalogPage catalog = new CatalogPage();
         List<String> nameOfProductInCart = catalog.addProductsToCart(numberOfProductInTheList);
@@ -82,5 +77,4 @@ public class CartTests extends BaseTest{
     public void deleteAllProductsFromCart(){
         cart.deleteAllProductsFromCart();
     }
-
 }

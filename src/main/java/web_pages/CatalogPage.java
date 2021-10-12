@@ -17,8 +17,6 @@ public class CatalogPage extends BasePage{
     @FindBy(css = ".quick-view")
     private List<WebElement> quickViews;
 
-    String wishListButtonStr = "#buy_block #wishlist_button";
-
     @FindBy(css = "#buy_block #wishlist_button")
     private WebElement wishlistButton;
 
@@ -31,7 +29,7 @@ public class CatalogPage extends BasePage{
     @FindBy(css = "p#add_to_cart button")
     private WebElement addToCartButton;
 
-    @FindBy(css = "div#layer_cart span[title='Close window']")
+    @FindBy(css = "div#layer_cart .cross")
     private WebElement closeWindow;
 
     @FindBy(css = ".shopping_cart a")
@@ -49,13 +47,9 @@ public class CatalogPage extends BasePage{
             List<String> productNames = new ArrayList<>();
             for (int i = 0; i < numberInList; i++){
                 productNames.add(selectProducts(i));
-                /*WebDriverWait wait = new WebDriverWait(driver, 20);
-                wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(wishListButtonStr))).click();
-                wait.until(ExpectedConditions.elementToBeClickable(close)).click();*/
                 waitForVisible(wishlistButton).click();
                 waitForClickable(close).click();
                 driver.switchTo().defaultContent();
-                //wait.until(ExpectedConditions.elementToBeClickable(close)).click();
                 waitForClickable(close).click();
             }
             return productNames;
@@ -76,11 +70,8 @@ public class CatalogPage extends BasePage{
             List<String> productNames = new ArrayList<>();
             for (int i = 0; i < numberInList; i++){
                 productNames.add(selectProducts(i));
-                /*WebDriverWait wait = new WebDriverWait(driver, 20);
-                wait.until(ExpectedConditions.elementToBeClickable(addToCartButton)).click();*/
                 waitForClickable(addToCartButton).click();
                 driver.switchTo().defaultContent();
-                //wait.until(ExpectedConditions.elementToBeClickable(closeWindow)).click();
                 waitForClickable(closeWindow).click();
             }
             return productNames;

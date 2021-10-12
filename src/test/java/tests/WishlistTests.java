@@ -1,44 +1,37 @@
 package tests;
 
-import driver.DriverSingleton;
 import io.qameta.allure.*;
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
-import org.openqa.selenium.WebDriver;
-import web_pages.*;
+import web_pages.AccountPage;
+import web_pages.CatalogPage;
+import web_pages.Header;
+import web_pages.WishlistPage;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.parallel.ExecutionMode.CONCURRENT;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 
 @Epic("Shop functionality")
 @Feature("Add into Wishlist")
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+//@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Tag("Critical")
 public class WishlistTests extends BaseTest{
-    private Header header;
-    private WishlistPage wishlist;
-    private AccountPage account;
-    private WebDriver driver = DriverSingleton.getInstance().getCurrentWebDriver();
+    WishlistPage wishlist;
 
     @Test
     @Story("Content of wishlist tests")
     @Severity(SeverityLevel.CRITICAL)
     @Description("Verify that wishlist is empty")
     @Tag("SkipCleanup")
-    public void verifyWishlist(){
-        header = new Header();
-        LoginPage loginPage = new LoginPage();
-        header.loginToSite();
+    public void verifyWishlistIsEmpty(){
+        loginToSite();
         AccountPage account = new AccountPage();
-        loginPage.signIn();
-        WishlistPage wishlist = new WishlistPage();
+        wishlist = new WishlistPage();
         account.goIntoWishlist();
-        Assertions.assertTrue(!wishlist.isElementVisible(), "wishlist is empty");
+        Assertions.assertTrue(!wishlist.isElementIsPresent(), "wishlist is empty");
     }
 
     @ParameterizedTest
@@ -48,11 +41,11 @@ public class WishlistTests extends BaseTest{
     @Description("Verify that product can be add to auto-created Wishlist")
     @Tag("stable")
     public void addToAutoCreatedWishlistProduct(int numberOfProductInTheList){
-        verifyWishlist();
+        Header header = loginToSite();
         CatalogPage catalog = new CatalogPage();
         header.goToProductList();
         List<String> productsName = catalog.addProductsToWishList(numberOfProductInTheList);
-        account = new AccountPage();
+        AccountPage account = new AccountPage();
         header.goToAccount();
         wishlist = new WishlistPage();
         account.goIntoWishlist();
@@ -60,7 +53,7 @@ public class WishlistTests extends BaseTest{
         String nameOfProductInWishlist = wishlist.nameOfProductInWishlist();
         int quantity = wishlist.retrieveProductQuantity();
         Assertions.assertAll("Wishlist was created automatically and my product is in the list",
-                () -> assertTrue(wishlist.isElementVisible()),
+                () -> assertTrue(wishlist.isElementIsPresent()),
                 () -> assertEquals( nameOfProductInWishlist, productsName.get(0), "My product in wishlist"),
                 () -> assertEquals( quantity, numberOfProductInTheList, "Quantity of product is 1")
         );
@@ -73,13 +66,10 @@ public class WishlistTests extends BaseTest{
     @Description("Verify that product can be add to auto-created Wishlist")
     @Tag("stable")
     public void addToManuallyCreatedWishlistProduct(int numberOfProductInTheList){
-        header = new Header();
-        LoginPage loginPage = new LoginPage();
-        header.loginToSite();
-        account = new AccountPage();
-        loginPage.signIn();
-        wishlist = new WishlistPage();
+        Header header = loginToSite();
+        AccountPage account = new AccountPage();
         account.goIntoWishlist();
+        wishlist = new WishlistPage();
         wishlist.createWishlist("My first list");
         CatalogPage catalog = new CatalogPage();
         header.goToProductList();
@@ -90,7 +80,7 @@ public class WishlistTests extends BaseTest{
         String nameOfProductInWishlist = wishlist.nameOfProductInWishlist();
         int quantity = wishlist.retrieveProductQuantity();
         Assertions.assertAll("Wishlist was created automatically and my product is in the list",
-                () -> assertTrue(wishlist.isElementVisible()),
+                () -> assertTrue(wishlist.isElementIsPresent()),
                 () -> assertEquals( nameOfProductInWishlist, productsName.get(0), "My product in wishlist"),
                 () -> assertEquals( quantity, numberOfProductInTheList, "Quantity of product is 1")
         );
