@@ -44,4 +44,10 @@ public class DriverSingleton {
             webDriver.set(null);
         }
     }
+
+    public void deleteCookies(){
+        WebDriver driver = this.webDriver.get();
+        driver.manage().deleteAllCookies();
+        driver.navigate().refresh();
+    }
 }

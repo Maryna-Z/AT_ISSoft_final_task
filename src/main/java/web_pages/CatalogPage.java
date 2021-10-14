@@ -1,6 +1,7 @@
 package web_pages;
 
 import io.qameta.allure.Step;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
@@ -8,6 +9,7 @@ import org.openqa.selenium.support.PageFactory;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class CatalogPage extends BasePage{
 
@@ -48,9 +50,11 @@ public class CatalogPage extends BasePage{
             for (int i = 0; i < numberInList; i++){
                 productNames.add(selectProducts(i));
                 waitForVisible(wishlistButton).click();
-                waitForClickable(close).click();
+                waitForVisible(close).click();
+                //waitForClickable(close).click();
                 driver.switchTo().defaultContent();
-                waitForClickable(close).click();
+                //waitForClickable(close).click();
+                waitForVisible(close).click();
             }
             return productNames;
         }
@@ -72,6 +76,7 @@ public class CatalogPage extends BasePage{
                 productNames.add(selectProducts(i));
                 waitForClickable(addToCartButton).click();
                 driver.switchTo().defaultContent();
+                //driver.manage().timeouts().implicitlyWait(3, TimeUnit.SECONDS);
                 waitForClickable(closeWindow).click();
             }
             return productNames;
@@ -81,6 +86,7 @@ public class CatalogPage extends BasePage{
 
     @Step("Select products")
     public String selectProducts(int numberInList){
+        ((JavascriptExecutor)driver).executeScript("arguments[0].scrollIntoView(true);", productContainers.get(numberInList));
         new Actions(driver).moveToElement(productContainers.get(numberInList)).perform();
         new Actions(driver).moveToElement(quickViews.get(numberInList)).click().perform();
         driver.switchTo().frame(0);

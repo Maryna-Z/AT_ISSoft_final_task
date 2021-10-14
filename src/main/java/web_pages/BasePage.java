@@ -27,5 +27,4 @@ public class BasePage {
         WebDriverWait wait = new WebDriverWait(driver, FAST_WAIT);
         return wait.until(ExpectedConditions.visibilityOf(element));
     }
-
 }

@@ -4,9 +4,14 @@ import io.qameta.allure.Step;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import utils.Utils;
+
+import java.util.Properties;
 
 public class Header extends BasePage {
-    private String url = "http://automationpractice.com/";
+    private String propertyPath = "src/test/resources/sites.properties";
+    private Properties properties = Utils.getProperties(propertyPath);
+
 
     @FindBy(css = ".account span")
     private WebElement viewCustomerAccountName;
@@ -26,7 +31,7 @@ public class Header extends BasePage {
 
     @Step("Click sign in button")
     public void loginToSite(){
-        driver.get(url);
+        driver.get(properties.getProperty("URL"));
         waitForClickable(signInButton).click();
     }
 

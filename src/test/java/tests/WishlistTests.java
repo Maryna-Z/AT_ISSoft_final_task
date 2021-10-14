@@ -1,5 +1,6 @@
 package tests;
 
+import driver.DriverSingleton;
 import io.qameta.allure.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -93,5 +94,6 @@ public class WishlistTests extends BaseTest{
             return;
         }
         wishlist.deleteProductFromWishlist();
+        DriverSingleton.getInstance().deleteCookies();
     }
 }
