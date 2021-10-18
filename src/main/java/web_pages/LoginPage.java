@@ -1,30 +1,35 @@
 package web_pages;
 
+import dto.UserDTO;
 import io.qameta.allure.Step;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
-import org.openqa.selenium.support.ui.WebDriverWait;
+import utils.Parser;
 import utils.Utils;
 
 import java.util.Properties;
+import java.util.concurrent.TimeUnit;
 
-public class LoginPage {
-    WebDriver driver;
+public class LoginPage extends BasePage{
 
     private String propertyPath = "src/test/resources/mail.properties";
     private Properties properties = Utils.getProperties(propertyPath);
-    private String email_create = "email_create";
+
+    @FindBy(id = "email_create")
+    private WebElement emailCreateInput;
+
+    private String email_createStr = "email_create";
     public String userName;
 
     @FindBy(id = "SubmitCreate")
     private WebElement submit_create;
 
-    String firstName = "customer_firstname";
+    String firstNameStr = "customer_firstname";
+
+    @FindBy(id = "customer_firstname")
+    private WebElement firstNameInput;
 
     @FindBy(id = "customer_lastname")
     private WebElement lastName;
@@ -56,8 +61,7 @@ public class LoginPage {
     @FindBy(id = "SubmitLogin")
     private WebElement signIn;
 
-    public LoginPage(WebDriver driver) {
-        this.driver = driver;
+    public LoginPage() {
         PageFactory.initElements(this.driver, this);
     }
 
@@ -66,25 +70,24 @@ public class LoginPage {
     }
 
     @Step("Create account")
-    public void createAccount(){
-        WebDriverWait wait = new WebDriverWait(driver, 10);
-        wait.until(ExpectedConditions.presenceOfElementLocated(By.id(email_create))).sendKeys(Utils.emailGenerator());
+    public void clickCreateAccButton(){
+        waitForVisible(emailCreateInput).sendKeys(Utils.emailGenerator());
         submit_create.click();
     }
 
     @Step("Fill all required fields")
     public void fillRequiredFields(){
-        WebDriverWait wait = new WebDriverWait(driver, 10);
-        String inputFirstName = Utils.stringGenerator();
-        wait.until(ExpectedConditions.presenceOfElementLocated(By.id(firstName))).sendKeys(inputFirstName);
-        String inputLastName = Utils.stringGenerator();
+        UserDTO userDTO = Parser.readFromFile();
+        String inputFirstName = userDTO.getFirstName();
+        waitForVisible(firstNameInput).sendKeys(inputFirstName);
+        String inputLastName = userDTO.getLastName();
         lastName.sendKeys(inputLastName);
         userName = inputFirstName + " " + inputLastName;
-        password.sendKeys(properties.getProperty("PASSWORD_STORE"));
-        address.sendKeys(Utils.addressGenerator());
-        city.sendKeys("Sitka");
+        password.sendKeys(userDTO.getPassword());
+        address.sendKeys(userDTO.getAddress());
+        city.sendKeys(userDTO.getCity());
         selectState();
-        postcode.sendKeys(Utils.numberGenerator(5));
+        postcode.sendKeys(userDTO.getPostCode());
         mobile.sendKeys(Utils.numberGenerator(12));
     }
 
@@ -95,16 +98,15 @@ public class LoginPage {
     }
 
     @Step("Click Register button")
-    public Account register(){
+    public void register(){
         register.click();
-        return new Account(driver);
     }
 
     @Step("Log in account")
-    public Account signIn(){
+    public void signIn(){
+        driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
         email.sendKeys(properties.getProperty("USER_NAME_STORE"));
         password.sendKeys(properties.getProperty("PASSWORD_STORE"));
         signIn.click();
-        return new Account(driver);
     }
 }
